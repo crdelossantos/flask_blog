@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from pathlib import Path
+import zoneinfo
 
 app = Flask(__name__)
 path_name=str(Path.cwd())
@@ -11,9 +12,10 @@ db = SQLAlchemy(app)
 
 class Post(db.Model):
 	__tablename__ = "posts"
+	zona_madrid = zoneinfo.ZoneInfo("Europe/Madrid")
 	id = db.Column(db.Integer, primary_key=True)
 	titulo = db.Column(db.String, nullable=False)
-	fecha = db.Column(db.DateTime, default=datetime.now)
+	fecha = db.Column(db.DateTime, default=datetime.now(zona_madrid))
 	texto = db.Column(db.String, nullable=False)
 
 @app.route("/")
